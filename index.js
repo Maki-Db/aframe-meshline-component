@@ -2,7 +2,7 @@ if (typeof AFRAME === 'undefined') {
     throw new Error('Component attempted to register before AFRAME was available.');
 }
 
-var ml = require('./lib/THREE.MeshLine');
+import * as ml from './lib/THREE.MeshLine';
 THREE.MeshLine = ml.MeshLine;
 THREE.MeshLineMaterial = ml.MeshLineMaterial;
 
@@ -97,8 +97,10 @@ AFRAME.registerComponent('meshline', {
     //? try {var w = widthFn(0);} catch(e) {warn(e);}
     var line = new THREE.MeshLine();
     line.setGeometry(new Float32Array(vertices), widthFn);
+    let mesh = new THREE.Mesh(line.geometry, material);
+    mesh.raycast = ml.MeshLineRaycast;
     
-    this.el.setObject3D('mesh', new THREE.Mesh(line.geometry, material));
+    this.el.setObject3D('mesh', mesh );
   },
   
   remove: function () {
